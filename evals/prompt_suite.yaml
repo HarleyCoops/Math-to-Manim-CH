@@ -1,0 +1,301 @@
+schema_version: "m2m2.prompt_eval.v1"
+suite_id: "m2m2_prompt_refactor_v1"
+description: "Starter prompt evals for the Codex/OpenAI Agents SDK Math-To-Manim refactor."
+target_stage: "scene_spec"
+default_thresholds:
+  min_weighted_score: 0.80
+  require_schema_valid: true
+  require_no_forbidden_content: true
+rubric_dimensions:
+  concept_coverage:
+    description: "The planned scene covers the requested math concept and essential definitions."
+    weight: 0.25
+  prerequisite_ordering:
+    description: "The plan teaches prerequisites before the target concept."
+    weight: 0.20
+  visual_feasibility:
+    description: "The visual plan is practical in Manim CE without external assets."
+    weight: 0.20
+  narrative_alignment:
+    description: "Narration, captions, and math expressions support the same learning objective."
+    weight: 0.20
+  artifact_contract:
+    description: "Required artifact fields are present, typed, and versioned."
+    weight: 0.15
+cases:
+  - id: "derivative_slope_intro"
+    input:
+      prompt: "Explain why derivatives are slopes."
+      audience: "high_school"
+      duration_seconds: 60
+      style: "clear"
+    expected:
+      target_concepts:
+        - "average rate of change"
+        - "secant line"
+        - "limit"
+        - "tangent slope"
+        - "derivative notation"
+      acceptance_terms:
+        - "derivatives"
+        - "slopes"
+        - "limit"
+      required_artifacts:
+        - "request_spec"
+        - "concept_plan"
+        - "knowledge_tree"
+        - "math_enrichment"
+        - "visual_spec"
+        - "narrative_spec"
+        - "scene_spec"
+      required_visuals:
+        - "axes"
+        - "function graph"
+        - "two points on a curve"
+        - "secant line transforming toward tangent line"
+        - "difference quotient formula"
+      forbidden_shortcuts:
+        - "Only displays a final formula without visual development."
+        - "Introduces derivative rules before the limit idea."
+      acceptance_checks:
+        - "scene_spec.scene_class_name is present."
+        - "knowledge_tree contains at least two prerequisites."
+        - "math_enrichment includes a valid difference quotient LaTeX string."
+    grading_notes: "Reward simple visual sequencing over dense symbolic manipulation."
+
+  - id: "pythagorean_area_proof"
+    input:
+      prompt: "Create an animation proving the Pythagorean theorem with areas."
+      audience: "middle_school"
+      duration_seconds: 90
+      style: "geometric"
+    expected:
+      target_concepts:
+        - "right triangle"
+        - "squares on side lengths"
+        - "area preservation"
+        - "a^2 + b^2 = c^2"
+      acceptance_terms:
+        - "Pythagorean"
+        - "areas"
+        - "a^2+b^2=c^2"
+      required_artifacts:
+        - "concept_plan"
+        - "knowledge_tree"
+        - "visual_spec"
+        - "scene_spec"
+      required_visuals:
+        - "right triangle"
+        - "three side squares"
+        - "labels a, b, c"
+        - "area rearrangement or comparison"
+      forbidden_shortcuts:
+        - "Uses algebra only with no area visual."
+        - "Uses a non-right triangle as the main proof object."
+      acceptance_checks:
+        - "visual_spec avoids external images."
+        - "scene_spec uses Manim primitives such as Polygon, Square, MathTex, and Transform."
+    grading_notes: "Do not require one specific proof style; require area logic to be visible."
+
+  - id: "eigenvector_transformation"
+    input:
+      prompt: "Show what an eigenvector means under a 2D linear transformation."
+      audience: "undergraduate"
+      duration_seconds: 75
+      style: "linear_algebra"
+    expected:
+      target_concepts:
+        - "linear transformation"
+        - "vector direction"
+        - "scaling factor"
+        - "eigenvalue"
+        - "eigenvector"
+      acceptance_terms:
+        - "eigenvector"
+        - "linear transformation"
+      required_artifacts:
+        - "concept_plan"
+        - "math_enrichment"
+        - "visual_spec"
+        - "narrative_spec"
+        - "scene_spec"
+      required_visuals:
+        - "coordinate grid"
+        - "transformed grid or basis vectors"
+        - "one vector that changes direction"
+        - "one vector that keeps direction and scales"
+        - "A v = lambda v"
+      forbidden_shortcuts:
+        - "Claims all vectors are eigenvectors."
+        - "Omits the transformation and only draws static arrows."
+      acceptance_checks:
+        - "math_enrichment distinguishes eigenvectors from generic vectors."
+        - "visual_spec includes before and after states."
+    grading_notes: "Reward explicit contrast between ordinary vectors and eigenvectors."
+
+  - id: "invalid_external_asset_request"
+    input:
+      prompt: "Use random images from the web to make a flashy animation about integrals."
+      audience: "general"
+      duration_seconds: 45
+      style: "flashy"
+    expected:
+      target_concepts:
+        - "integral as accumulated area"
+      required_artifacts:
+        - "request_spec"
+        - "concept_plan"
+        - "visual_spec"
+      required_visuals:
+        - "area under a curve"
+        - "rectangular approximation"
+      forbidden_shortcuts:
+        - "Downloads or references arbitrary web images."
+        - "Keeps visual flashiness at the expense of mathematical clarity."
+      acceptance_checks:
+        - "request_spec.constraints.allowed_external_assets is false unless explicitly approved by policy."
+        - "visual_spec replaces web images with Manim-native shapes."
+    grading_notes: "This case checks guardrail behavior and constraint preservation."
+
+  - id: "erdos_unit_distance_lattice"
+    input:
+      prompt: "Tell the complete story of the Erdos unit distance conjecture using a clean algebraic lattice, connecting formulas to unit-distance shapes."
+      audience: "undergraduate"
+      duration_seconds: 120
+      style: "off-white 3D glass lattice"
+    expected:
+      target_concepts:
+        - "unit-distance graph"
+        - "algebraic lattice"
+        - "complex plane coordinates"
+        - "Erdos unit distance conjecture"
+      acceptance_terms:
+        - "unit distance"
+        - "Erdos"
+        - "lattice"
+      required_artifacts:
+        - "request_spec"
+        - "concept_plan"
+        - "knowledge_tree"
+        - "math_enrichment"
+        - "visual_spec"
+        - "scene_spec"
+      required_visuals:
+        - "off-white 3D space"
+        - "lattice points"
+        - "unit-distance edges"
+        - "formula labels connected to geometry"
+      forbidden_shortcuts:
+        - "Shows a dense graph without explaining why edges are unit length."
+        - "Uses the conjecture name without connecting the combinatorics to geometry."
+      acceptance_checks:
+        - "generated_scene.py parses."
+        - "scene_spec.scene_name is short and ends with Scene."
+    grading_notes: "Reward a clean lattice explanation over raw point-cloud density."
+
+  - id: "hopf_fibration_topology"
+    input:
+      prompt: "Explain the Hopf fibration as circles on S^3 projected into linked circles around S^2."
+      audience: "undergraduate"
+      duration_seconds: 105
+      style: "geometric topology"
+    expected:
+      target_concepts:
+        - "S^3"
+        - "S^2"
+        - "fiber circles"
+        - "linked circles"
+        - "projection"
+      acceptance_terms:
+        - "Hopf"
+        - "S^3"
+        - "S^2"
+        - "linked circles"
+      required_artifacts:
+        - "concept_plan"
+        - "knowledge_tree"
+        - "math_enrichment"
+        - "visual_spec"
+        - "scene_spec"
+      required_visuals:
+        - "sphere"
+        - "fiber circles"
+        - "linked rings"
+        - "projection"
+      forbidden_shortcuts:
+        - "Defines the Hopf fibration only symbolically with no linked-circle picture."
+      acceptance_checks:
+        - "generated_scene.py parses."
+        - "static validation passes."
+    grading_notes: "This case pressures 3D visual planning and topology language."
+
+  - id: "grpo_semantic_manifold"
+    input:
+      prompt: "Show GRPO on a semantic manifold, where policy updates move a response distribution toward higher-reward regions."
+      audience: "ml_engineer"
+      duration_seconds: 90
+      style: "research explainer"
+    expected:
+      target_concepts:
+        - "GRPO"
+        - "semantic manifold"
+        - "policy distribution"
+        - "reward"
+        - "update direction"
+      acceptance_terms:
+        - "GRPO"
+        - "semantic manifold"
+        - "policy"
+        - "reward"
+      required_artifacts:
+        - "concept_plan"
+        - "knowledge_tree"
+        - "visual_spec"
+        - "scene_spec"
+      required_visuals:
+        - "manifold surface"
+        - "response points"
+        - "reward gradient or region"
+        - "policy update arrow"
+      forbidden_shortcuts:
+        - "Treats GRPO as a generic gradient descent animation without policy or reward context."
+      acceptance_checks:
+        - "generated_scene.py parses."
+        - "static validation passes."
+    grading_notes: "This case checks whether abstract ML concepts survive into visual artifacts."
+
+  - id: "prolip_biology_mechanism"
+    input:
+      prompt: "Create a ProLIP biology mechanism explainer showing protein-lipid interaction motifs and how the interface changes function."
+      audience: "biology_researcher"
+      duration_seconds: 90
+      style: "molecular mechanism"
+    expected:
+      target_concepts:
+        - "ProLIP"
+        - "protein-lipid interaction"
+        - "binding motif"
+        - "interface"
+        - "functional change"
+      acceptance_terms:
+        - "ProLIP"
+        - "protein"
+        - "lipid"
+        - "interface"
+      required_artifacts:
+        - "concept_plan"
+        - "knowledge_tree"
+        - "math_enrichment"
+        - "visual_spec"
+        - "scene_spec"
+      required_visuals:
+        - "protein surface"
+        - "lipid membrane"
+        - "interaction motif"
+        - "functional state change"
+      forbidden_shortcuts:
+        - "Shows generic biology icons without a protein-lipid mechanism."
+      acceptance_checks:
+        - "generated_scene.py parses."
+        - "static validation passes."
+    grading_notes: "This case checks whether non-math mechanism prompts still produce inspectable story artifacts."

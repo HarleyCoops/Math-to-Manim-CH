@@ -1,0 +1,25 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.venv/
+venv/
+.env
+.env.*
+# Claude Code nested worktrees: never commit (often broken gitlinks if admin dir is pruned).
+.claude/worktrees/
+build/
+dist/
+*.egg-info/
+runs/
+.tmp-runs/
+media/
+output/
+artifacts/
+*.mp4
+*.gif
+# Curated legacy showcase GIFs are tracked (see docs/showcase/).
+!docs/showcase/assets/*.gif
+*.png
+*.log
